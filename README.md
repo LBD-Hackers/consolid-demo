@@ -1,7 +1,7 @@
 # LBDserver demo reproduction
 This repository aids in locally reproducing an LBDserver experiment. The following steps should be taken:
 
-Before you start, please execute `npm install'.
+Before you start, please execute `npm install`.
 
 * Initialise a local Solid Community Server, with the customised version to have an associated SPARQL endpoint. A prototype can be found [here](https://github.com/LBD-Hackers/SolidCommunity_Fuseki.git).
 * Initialise a [Fuseki backend]().
