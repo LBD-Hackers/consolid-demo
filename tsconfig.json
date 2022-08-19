@@ -1,0 +1,35 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2015",
+//     "module": "esnext",
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "outDir": "./out-tsc",
+//     "moduleResolution": "node",
+//     "skipLibCheck": true,
+//     "declaration": true,
+//     "resolveJsonModule": true
+//   },
+//   "include": [
+//     "./src/**/*.ts"
+// , "src/bin/cli-tool.js"  ]
+// }
+
+{
+  "compilerOptions": {
+    "declaration": true,
+    "downlevelIteration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "outDir": "lib/types",
+    "esModuleInterop": true,
+    "lib": ["es2021"]
+  },
+  "include": [
+    "src/index.js"
+  ],
+}
