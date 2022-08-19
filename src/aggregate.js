@@ -1,6 +1,6 @@
 const { Session } = require("@inrupt/solid-client-authn-node")
 const { Catalog } = require("consolid-daapi")
-const { ReferenceRegistry } = require('consolid-raapi')
+const { ReferenceRegistry, findReferenceRegistry } = require('consolid-raapi')
 
 async function run() {
     const session = new Session()

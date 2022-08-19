@@ -1,28 +1,12 @@
 const { Session } = require("@inrupt/solid-client-authn-node")
-const { Catalog, generateSession, getRoot, getSatelliteFromLdpResource } = require("consolid-daapi")
-const { ReferenceRegistry } = require('consolid-raapi')
+const { Catalog, generateSession, getRoot, getSatelliteFromLdpResource, LBDS } = require("consolid-daapi")
+const { ReferenceRegistry, findReferenceRegistry } = require('consolid-raapi')
 const { v4 } = require('uuid')
 const { DCTERMS, DCAT } = require('@inrupt/vocab-common-rdf')
+const {QueryEngine} = require('@comunica/query-sparql')
 
 const users = require('../config/accounts.json')
 const user = users.users["http://localhost:3000/fm/profile/card#me"]
-
-async function findReferenceRegistry(projectUrl) {
-    const engine = new QueryEngine()
-    const sat = await getSatelliteFromLdpResource(projectUrl)
-
-    const q = `
-    SELECT ?refReg WHERE {
-        <${projectUrl}> <${DCAT.dataset}> ?ds .
-        ?ds a <${LBDS.ReferenceRegistry}> ;
-            <${DCAT.distribution}>/<${DCAT.downloadURL}> ?refReg.
-    } LIMIT 1`
-
-    const results = await engine.queryBindings(q, { sources: [sat] })
-    const bindings = await results.toArray()
-    if (bindings.length) return bindings[0].get('refReg').value
-    else throw new Error('could not find reference registry for this project')
-}
 
 async function run() {
     const session = await generateSession(user, user.webId)
