@@ -1,6 +1,6 @@
 const users = require('../config/accounts.json')
 const {fetch} = require('cross-fetch')
-const {generateSession, Catalog, LBDS} = require('consolid-daapi')
+const {generateSession, Catalog, CONSOLID} = require('consolid-daapi')
 const {ReferenceRegistry} = require('consolid-raapi')
 const {v4} = require('uuid')
 const {RDF, DCAT, DCTERMS} = require('@inrupt/vocab-common-rdf')
@@ -22,7 +22,7 @@ async function createProject(user) {
 
     const metadata = [{
         predicate: RDF.type,
-        object: LBDS.Project
+        object: CONSOLID.Project
     }]
 
     await project.create(true, metadata)

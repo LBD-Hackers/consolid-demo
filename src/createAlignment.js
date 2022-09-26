@@ -1,5 +1,5 @@
 const users = require('../config/accounts.json')
-const {generateSession, LBDS, getSatelliteFromLdpResource, getRoot} = require('consolid-daapi')
+const {generateSession, CONSOLID, getSatelliteFromLdpResource, getRoot} = require('consolid-daapi')
 const {ReferenceRegistry} = require('consolid-raapi')
 const {DCAT, DCTERMS} = require('@inrupt/vocab-common-rdf')
 const {QueryEngine} = require('@comunica/query-sparql')
@@ -7,14 +7,17 @@ const {v4} = require('uuid')
 
 async function findReferenceRegistry(projectUrl) {
     const engine = new QueryEngine()
+    console.log('projectUrl', projectUrl)
     const sat = await getSatelliteFromLdpResource(projectUrl)
-
+    console.log('sat', sat)
     const q = `
     SELECT ?refReg WHERE {
         <${projectUrl}> <${DCAT.dataset}> ?ds .
-        ?ds a <${LBDS.ReferenceRegistry}> ;
+        ?ds a <${CONSOLID.ReferenceRegistry}> ;
             <${DCAT.distribution}>/<${DCAT.downloadURL}> ?refReg.
     } LIMIT 1`
+
+    console.log('q', q)
     
     const results = await engine.queryBindings(q, {sources: [sat]})
     const bindings = await results.toArray()
@@ -88,19 +91,19 @@ async function run() {
         const gltfRef = gltfRefRegUrl + "#" + v4()
         const gltfId = gltfRefRegUrl + "#" + v4()
 
-        updateStringTtl += `<${ttlC}> a <${LBDS.Concept}> ;
-            <${LBDS.aggregates}> <${ttlRef}>, <${gltfC}> .
-            <${ttlRef}> <${LBDS.hasIdentifier}> <${ttlId}> ;
+        updateStringTtl += `<${ttlC}> a <${CONSOLID.Concept}> ;
+            <${CONSOLID.aggregates}> <${ttlRef}>, <${gltfC}> .
+            <${ttlRef}> <${CONSOLID.hasIdentifier}> <${ttlId}> ;
              <${DCTERMS.created}> "${new Date()}".
-            <${ttlId}> <${LBDS.inDocument}> <${ttlUrl}> ;
+            <${ttlId}> <${CONSOLID.inDocument}> <${ttlUrl}> ;
             <https://schema.org/value> "${pair.ttl}" .
             `
 
-        updateStringGlTF += `<${gltfC}> a <${LBDS.Concept}> ;
-        <${LBDS.aggregates}> <${gltfRef}>, <${ttlC}> .
-        <${gltfRef}> <${LBDS.hasIdentifier}> <${gltfId}> ;
+        updateStringGlTF += `<${gltfC}> a <${CONSOLID.Concept}> ;
+        <${CONSOLID.aggregates}> <${gltfRef}>, <${ttlC}> .
+        <${gltfRef}> <${CONSOLID.hasIdentifier}> <${gltfId}> ;
          <${DCTERMS.created}> "${new Date()}".
-        <${gltfId}> <${LBDS.inDocument}> <${gltfUrl}> ;
+        <${gltfId}> <${CONSOLID.inDocument}> <${gltfUrl}> ;
         <https://schema.org/value> "${pair.gltf}" .
         `
     }
