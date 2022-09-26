@@ -1,5 +1,5 @@
-# LBDserver demo reproduction
-This repository aids in locally reproducing an LBDserver experiment. The following steps should be taken:
+# ConSolid demo reproduction
+This repository aids in locally reproducing a ConSolid experiment. The following steps should be taken:
 
 Before you start, please execute `npm install`.
 
