@@ -1,0 +1,47 @@
+{
+    "users": {
+        "https://pod.werbrouck.me/architect/profile/card#me": {
+            "webId": "https://pod.werbrouck.me/architect/profile/card#me",
+            "name": "architect",
+            "email": "architect@example.org",
+            "password": "test123",
+            "idp": "https://pod.werbrouck.me",
+            "projectId": "0c39ccf8-b17e-47d8-a1d7-49a71c1a342f",
+            "refRegId": "0d80e558-8f5b-491f-856b-636e29d3c2b5",
+            "resources": [{
+                "path": "./resources/duplex/duplex.ttl",
+                "id": "5433f023-2ffe-4006-9e49-e26bbcb41fb6"
+            }]
+        },
+        "https://pod.werbrouck.me/engineer/profile/card#me": {
+            "webId": "https://pod.werbrouck.me/engineer/profile/card#me",
+            "name": "engineer",
+            "email": "engineer@example.org",
+            "password": "test123",
+            "idp": "https://pod.werbrouck.me",
+            "projectId": "40050b82-9907-434c-91ab-7ce7c137d8b6",
+            "refRegId": "a55eecd4-e773-436a-8013-5e2b6932fc28",
+            "resources": [
+                {
+                    "path": "./resources/duplex/duplex.gltf",
+                    "id": "f177466f-5929-445f-b2d7-ee19576c7d3a"
+                }
+            ]
+        },
+        "https://pod.werbrouck.me/fm/profile/card#me": {
+            "webId": "https://pod.werbrouck.me/fm/profile/card#me",
+            "name": "fm",
+            "email": "fm@example.org",
+            "password": "test123",
+            "idp": "https://pod.werbrouck.me",
+            "projectId": "fb3d5bcd-8bcb-4d46-be2b-6c3ef824d5d9",
+            "refRegId": "afa64a49-eae2-4a39-9fe4-3be92b491453",
+            "resources": [
+                {
+                    "path": "./resources/duplex/crack.jpg",
+                    "id": "93f09e7a-0229-46e8-8579-964f4d02fca3"
+                }
+            ]
+        }
+    }
+}
