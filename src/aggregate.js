@@ -1,4 +1,4 @@
-const p = require('./duplex.json')
+const p = require('./igent.json')
 const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates')
 const fetch = require('cross-fetch');
 const { Headers } = fetch;
