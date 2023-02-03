@@ -6,19 +6,24 @@ const { Headers } = fetch;
 const now = new Date()
 const queryCount = 1
 const iterations = 1
+
+const options = ["endpoint", "satellite"]
+const option = options[1]
+
 const query = `
 PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
 PREFIX bot: <https://w3id.org/bot#>
 PREFIX dot: <https://w3id.org/dot#>
 
-SELECT ?el ?g WHERE {graph ?g {?el a beo:Door}} LIMIT ${queryCount}`
+SELECT ?el ?g WHERE {graph ?g {?el a beo:Door}} LIMIT 1`
+
 
 async function run() {
     let allDuration = 0
 
     const queryResults = await queryProject()
     const query = new Date()
-
+    
     console.log("duration of query task: ", query.getTime() - now.getTime())
     
     for (let i = 0; i < iterations; i++) {
@@ -27,23 +32,23 @@ async function run() {
 
         for (const r of queryResults) {
             const startPropagation = new Date()
-            const concept = await findConceptById(r, p)
+            const concept = await findConceptById(r)
             if (concept.length) {
                 const final = {
-                    aliases: [],
+                    aliases: new Set(),
                     references: []
                 }
                 concept.forEach(reference => {
-                    final.aliases.push(reference.concept.value)
-                    if (reference.alias) final.aliases.push(reference.alias.value)
+                    final.aliases.add(reference.concept.value)
+                    if (reference.alias) final.aliases.add(reference.alias.value)
                     final.references.push({
                         reference: reference.reference.value,
-                        metadata: reference.meta.value,
                         identifier: reference.value.value,
                         document: reference.doc.value
                     })
                 })
-                // console.log('final', final)
+                final.aliases = Array.from(final.aliases)
+                console.log('final', final)
                 concepts.push(final)
                 const propagate = new Date()
                 const duration = propagate.getTime() - startPropagation.getTime()
@@ -72,7 +77,7 @@ async function findConceptById(concept) {
         }
         if (ref.alias) {
             if (!alreadyQueried.includes(ref.alias)) {
-                const remote = await queryRemoteReferences(ref, concept)
+                const remote = await queryRemoteReferences(ref)
                 if (remote.length) all.push(remote)
                 alreadyQueried.push(ref.alias)
             }
@@ -83,20 +88,25 @@ async function findConceptById(concept) {
 }
 
 async function queryLocalReferences(ref, concept) {
-    const query = selectLocalRepresentation(ref.local.value, ref.concept.value)
-    console.log('query', query)
+    let referenceRegistry = ref.concept.value
+    const hashindex = referenceRegistry.indexOf('#')
+    referenceRegistry = referenceRegistry.replace(referenceRegistry.substring(hashindex, referenceRegistry.length), "");
+    const query = selectLocalRepresentation(ref.local.value, ref.concept.value, referenceRegistry)
     const reference = []
-    const results = await queryFuseki(query, concept.owner.endpoint)
+    const results = await queryFuseki(query, concept.owner[option])
     results.results.bindings.forEach(binding => reference.push(binding))
     return reference
 }
 
-async function queryRemoteReferences(ref, concept) {
-    const query = selectRemoteRepresentation(ref.alias.value, ref.concept.value)
+async function queryRemoteReferences(ref) {
+    let referenceRegistry = ref.alias.value
+    const hashindex = referenceRegistry.indexOf('#')
+    referenceRegistry = referenceRegistry.replace(referenceRegistry.substring(hashindex, referenceRegistry.length), "");
+    const query = selectRemoteRepresentation(ref.alias.value, ref.concept.value, referenceRegistry)
     const podToEndpoint = {}
 
     p.forEach(i => {
-        podToEndpoint[i.pod] = i.endpoint
+        podToEndpoint[i.pod] = i[option]
     })
 
     const pod = getRoot(ref.alias.value)
@@ -108,7 +118,7 @@ async function queryRemoteReferences(ref, concept) {
 
 async function queryConcept(concept) {
     const query = selectConcept(concept.activeDocument, concept.identifier, concept.owner)
-    const endpoints = p.map(i => i.endpoint)
+    const endpoints = p.map(i => i[option])
     const projectConcept = []
     for (const endpoint of endpoints) {
         const results = await queryFuseki(query, endpoint)
@@ -154,6 +164,7 @@ async function queryProject() {
     };
 
     for (const endpoint of endpoints) {
+        console.log('endpoint', endpoint)
         const url = `${endpoint}`
         const results = await fetch(url, requestOptions)
             .then(response => response.json())
