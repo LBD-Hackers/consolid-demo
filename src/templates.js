@@ -49,7 +49,7 @@ const selectLocalRepresentation = (reference, concept) => {
 }
 
 const selectRemoteRepresentation = (alias, concept) => {
-    return addPrefixes(`SELECT ?reference ?value ?doc ?meta ?concept 
+    return addPrefixes(`SELECT ?reference ?value ?doc ?meta ?concept ?alias
     WHERE {
         <${alias}> consolid:aggregates ?reference .        
         ?reference consolid:hasIdentifier ?id .

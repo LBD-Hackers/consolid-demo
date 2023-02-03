@@ -1,11 +1,11 @@
-const p = require('./igent.json')
+const p = require('./duplex.json')
 const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates')
 const fetch = require('cross-fetch');
 const { Headers } = fetch;
 
 const now = new Date()
-const queryCount = 10
-const iterations = 10
+const queryCount = 1
+const iterations = 1
 const query = `
 PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
 PREFIX bot: <https://w3id.org/bot#>
@@ -20,7 +20,7 @@ async function run() {
     const query = new Date()
 
     console.log("duration of query task: ", query.getTime() - now.getTime())
-
+    
     for (let i = 0; i < iterations; i++) {
 
         const concepts = []
@@ -35,7 +35,7 @@ async function run() {
                 }
                 concept.forEach(reference => {
                     final.aliases.push(reference.concept.value)
-                    if (reference.alias) final.aliases.add(reference.alias.value)
+                    if (reference.alias) final.aliases.push(reference.alias.value)
                     final.references.push({
                         reference: reference.reference.value,
                         metadata: reference.meta.value,
@@ -84,6 +84,7 @@ async function findConceptById(concept) {
 
 async function queryLocalReferences(ref, concept) {
     const query = selectLocalRepresentation(ref.local.value, ref.concept.value)
+    console.log('query', query)
     const reference = []
     const results = await queryFuseki(query, concept.owner.endpoint)
     results.results.bindings.forEach(binding => reference.push(binding))
@@ -92,7 +93,6 @@ async function queryLocalReferences(ref, concept) {
 
 async function queryRemoteReferences(ref, concept) {
     const query = selectRemoteRepresentation(ref.alias.value, ref.concept.value)
-
     const podToEndpoint = {}
 
     p.forEach(i => {
