@@ -49,18 +49,18 @@ async function findPairs(ttlUrl, gltfUrl) {
 }
 
 async function run() {
-    const ttlUrl = "https://pod.werbrouck.me/architect/5433f023-2ffe-4006-9e49-e26bbcb41fb6"
-    const ttlProject = "https://pod.werbrouck.me/architect/0c39ccf8-b17e-47d8-a1d7-49a71c1a342f"
-    const gltfUrl = "https://pod.werbrouck.me/engineer/f177466f-5929-445f-b2d7-ee19576c7d3a"
-    const gltfProject = "https://pod.werbrouck.me/engineer/40050b82-9907-434c-91ab-7ce7c137d8b6"
+    const ttlUrl = "http://localhost:3000/architect/5433f023-2ffe-4006-9e49-e26bbcb41fb6"
+    const ttlProject = "http://localhost:3000/architect/0c39ccf8-b17e-47d8-a1d7-49a71c1a342f"
+    const gltfUrl = "http://localhost:3000/engineer/f177466f-5929-445f-b2d7-ee19576c7d3a"
+    const gltfProject = "http://localhost:3000/engineer/40050b82-9907-434c-91ab-7ce7c137d8b6"
 
     //1. find pairs via TTL query
     const pairs = await findPairs(ttlUrl, gltfUrl)
     const ttlRefRegUrl = await findReferenceRegistry(ttlProject)
     const gltfRefRegUrl = await findReferenceRegistry(gltfProject)
 
-    const ttlSession = await generateSession(users.users["https://pod.werbrouck.me/architect/profile/card#me"])
-    const gltfSession = await generateSession(users.users["https://pod.werbrouck.me/engineer/profile/card#me"])
+    const ttlSession = await generateSession(users.users["http://localhost:3000/architect/profile/card#me"])
+    const gltfSession = await generateSession(users.users["http://localhost:3000/engineer/profile/card#me"])
 
     const ttlRefReg = new ReferenceRegistry(ttlSession, ttlRefRegUrl)
     const gltfRefReg = new ReferenceRegistry(gltfSession, gltfRefRegUrl)

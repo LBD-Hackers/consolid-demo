@@ -1,15 +1,16 @@
 const p = require('./duplex.json')
+
 const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates_fuseki')
 const fetch = require('cross-fetch');
 const { Headers } = fetch;
 const QueryEngine = require('@comunica/query-sparql').QueryEngine
 const queryCount = 10
-const iterations = 10
+const iterations = 1
 
 const options = ["endpoint", "satellite"]
 const methods = ["comunica", "remote"]
 
-const option = options[1]
+const option = options[0]
 const method = methods[1]
 
 const query = `

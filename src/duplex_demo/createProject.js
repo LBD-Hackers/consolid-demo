@@ -1,4 +1,4 @@
-const users = require('../config/accounts_demo.json')
+const users = require('./setup.json')
 const {fetch} = require('cross-fetch')
 const {generateSession, Catalog, CONSOLID} = require('consolid-daapi')
 const {ReferenceRegistry} = require('consolid-raapi')
