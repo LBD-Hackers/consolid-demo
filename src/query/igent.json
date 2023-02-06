@@ -1,0 +1,23 @@
+[
+    {
+        "projectUrl": "https://pod.werbrouck.me/b-b/igent",
+        "pod": "https://pod.werbrouck.me/b-b/",
+        "endpoint": "https://fuseki.werbrouck.me/demo/b-b/sparql",
+        "satellite": "https://sparql.werbrouck.me/b-b/b-b/sparql",
+        "referenceRegistry": "https://pod.werbrouck.me/b-b/igent-referenceregistry"
+    },
+    {
+        "projectUrl": "https://pod.werbrouck.me/fm-ugent/igent",
+        "pod": "https://pod.werbrouck.me/fm-ugent/",
+        "endpoint": "https://fuseki.werbrouck.me/demo/fm-ugent/sparql",
+        "satellite": "https://sparql.werbrouck.me/fm-ugent/fm-ugent/sparql",
+        "referenceRegistry": "https://pod.werbrouck.me/fm-ugent/igent-referenceregistry"
+    },
+    {
+        "projectUrl": "https://pod.werbrouck.me/arcadis/igent",
+        "pod": "https://pod.werbrouck.me/arcadis/",
+        "endpoint": "https://fuseki.werbrouck.me/demo/arcadis/sparql",
+        "satellite": "https://sparql.werbrouck.me/arcadis/arcadis/sparql",
+        "referenceRegistry": "https://pod.werbrouck.me/arcadis/igent-referenceregistry"
+    }
+]
