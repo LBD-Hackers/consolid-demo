@@ -3,13 +3,20 @@ const { Catalog, generateSession, getRoot, getSatelliteFromLdpResource, LBDS } =
 const { ReferenceRegistry, findReferenceRegistry } = require('consolid-raapi')
 const { v4 } = require('uuid')
 const { DCTERMS, DCAT } = require('@inrupt/vocab-common-rdf')
-const {findConceptsById} = require('./functions')
-const users = require('../config/accounts_demo.json')
+const {findConceptsById}  = require('../query/functions')
+const users = require('./setup.json')
 const user = users.users["http://localhost:3000/fm/profile/card#me"]
-const p = require('../config/project_demo.json')
+const p = require('./project.json')
 const data = [{
     "activeDocument": "http://localhost:3000/engineer/f177466f-5929-445f-b2d7-ee19576c7d3a", 
-    "identifier": "2gRXFgjRn2HPE$YoDLX0q2"
+    "identifier": "2gRXFgjRn2HPE$YoDLX0q2",
+    "owner":     {
+        "projectUrl": "http://localhost:3000/engineer/40050b82-9907-434c-91ab-7ce7c137d8b6",
+        "pod": "http://localhost:3000/engineer/",
+        "endpoint": "http://localhost:3030/engineer/sparql",
+        "satellite": "http://localhost:3002/engineer/sparql",
+        "referenceRegistry": "http://localhost:3000/engineer/a55eecd4-e773-436a-8013-5e2b6932fc28"
+    }
 }]
 
 

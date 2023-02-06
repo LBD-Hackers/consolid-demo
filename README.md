@@ -26,8 +26,7 @@ You can now check that the alignment works by executing the following script:
   * `node ./src/query/aggregate_fuseki.js` This script performs a query-based a sub-document selection and retrieves all registered references to the same concept. Queries are directly sent to the Fuseki endpoint.
 
 ### With Comunica
-You can now check that the alignment works by executing the following script: 
-  * `node ./src/query/aggregate_comunica.js` This script performs a query-based a sub-document selection and retrieves all registered references to the same concept, using the [Comunica](https://comunica.dev) framework. 
+TBD
 
 ### With access control satellite
 This use case is quite experimental, as the access control satellite does only support a small subset of SPARQL queries yet. Nevertheless, the discovery patterns for the use case should remain the same. Apart from the infrastructure described above, you need to install the [SPARQL wrapper satellite](https://github.com/LBD-Hackers/lbdserver-sparql-satellite). Don't forget to `npm install`.
@@ -37,5 +36,5 @@ This use case is quite experimental, as the access control satellite does only s
   * ENGINEER: `<http://localhost:3000/engineer/profile/card#me> <https://w3id.org/consolid#hasSparqlSatellite> <http://localhost:3002/engineer/sparql> .`
   * FM: `<http://localhost:3000/fm/profile/card#me> <https://w3id.org/consolid#hasSparqlSatellite> <http://localhost:3003/fm/sparql> .`
 * You can now check that the alignment works by executing the following script: 
-  * `node ./src/query/aggregate_satellite.js` This script performs a query-based a sub-document selection and retrieves all registered references to the same concept. 
+  * `node ./src/query/aggregate_satellite.js` This script performs a query-based a sub-document selection and retrieves all registered references to the same concept. Queries are sent to the SPARQL satellite, which takes care of access control and the forwarding the query to the SPARQL endpoint (Fuseki).
 

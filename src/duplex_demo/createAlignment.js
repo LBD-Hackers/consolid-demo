@@ -1,4 +1,4 @@
-const users = require('../config/accounts_demo.json')
+const users = require('./setup.json')
 const {generateSession, CONSOLID, getSatelliteFromLdpResource, getRoot} = require('consolid-daapi')
 const {ReferenceRegistry} = require('consolid-raapi')
 const {DCAT, DCTERMS} = require('@inrupt/vocab-common-rdf')
@@ -7,7 +7,6 @@ const {v4} = require('uuid')
 
 async function findReferenceRegistry(projectUrl) {
     const engine = new QueryEngine()
-    console.log('projectUrl', projectUrl)
     const sat = await getSatelliteFromLdpResource(projectUrl)
     console.log('sat', sat)
     const q = `
@@ -16,9 +15,6 @@ async function findReferenceRegistry(projectUrl) {
         ?ds a <${CONSOLID.ReferenceRegistry}> ;
             <${DCAT.distribution}>/<${DCAT.downloadURL}> ?refReg.
     } LIMIT 1`
-
-    console.log('q', q)
-    
     const results = await engine.queryBindings(q, {sources: [sat]})
     const bindings = await results.toArray()
     if (bindings.length) return bindings[0].get('refReg').value

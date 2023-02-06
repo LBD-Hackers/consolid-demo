@@ -2,7 +2,6 @@ const users = require('./setup.json')
 const {fetch} = require('cross-fetch')
 const {generateSession, Catalog, CONSOLID} = require('consolid-daapi')
 const {ReferenceRegistry} = require('consolid-raapi')
-const {v4} = require('uuid')
 const {RDF, DCAT, DCTERMS} = require('@inrupt/vocab-common-rdf')
 const mime = require('mime-types')
 const path = require('path')
@@ -42,7 +41,7 @@ async function createProject(user) {
 
     // 4. upload the intended datasets
     for (const item of user.resources) {
-        const dsUrl = root + v4()
+        const dsUrl = root + item.id + "_meta_"
         const distUrl = root + item.id
 
         const p = path.join(__dirname, item.path);

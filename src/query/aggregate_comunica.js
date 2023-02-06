@@ -1,6 +1,6 @@
 const p = require('./duplex.json')
 
-const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates_fuseki')
+const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates_comunica')
 const fetch = require('cross-fetch');
 const { Headers } = fetch;
 const QueryEngine = require('@comunica/query-sparql').QueryEngine
@@ -25,11 +25,10 @@ const engine = new QueryEngine()
 async function run() {
     let allDuration = 0
 
-    // await engine.query(`ASK {?s ?p ?o}`, {sources: p.map(i => i.referenceRegistry)})
+    await engine.query(`ASK {?s ?p ?o}`, {sources: p.map(i => i.referenceRegistry)})
     const now = new Date()
     const queryResults = await queryProject()
     const query = new Date()
-    
     console.log("duration of query task: ", query.getTime() - now.getTime())
     
     for (let i = 0; i < iterations; i++) {
@@ -73,16 +72,15 @@ async function run() {
 }
 
 async function findConceptById(concept) {
-    const t1 = new Date()
     const conceptInfo = await queryConcept(concept)
-    const t2 = new Date()
-    // console.log('concept query', t2-t1)
+    console.log('conceptInfo', conceptInfo)
     const alreadyQueried = []
     const all = []
     for (const ref of conceptInfo) {
         if (!alreadyQueried.includes(ref.local)) {
             const t3 = new Date()
             const local = await queryLocalReferences(ref, concept)
+            console.log('local', local)
             if (local.length) all.push(local)
             alreadyQueried.push(ref.local)
             const t4 = new Date()
@@ -147,6 +145,7 @@ async function queryConcept(concept) {
         else results = await queryComunica(query, endpoint)
         if (results && results.results.bindings.length) results.results.bindings.forEach(binding => projectConcept.push(binding).value)
     }
+    console.log('first', first)
     return projectConcept
 }
 
