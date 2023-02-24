@@ -1,23 +1,23 @@
 [
     {
-        "projectUrl": "http://localhost:3000/b-b/igent",
-        "pod": "http://localhost:3000/b-b/",
+        "projectUrl": "https://pod.werbrouck.me/b-b/igent",
+        "pod": "https://pod.werbrouck.me/b-b/",
         "endpoint": "https://fuseki.werbrouck.me/demo/b-b/sparql",
         "satellite": "https://sparql.werbrouck.me/b-b/b-b/sparql",
-        "referenceRegistry": "http://localhost:3000/b-b/igent-referenceregistry"
+        "referenceRegistry": "https://pod.werbrouck.me/b-b/igent-referenceregistry"
     },
     {
-        "projectUrl": "http://localhost:3000/fm-ugent/igent",
-        "pod": "http://localhost:3000/fm-ugent/",
+        "projectUrl": "https://pod.werbrouck.me/fm-ugent/igent",
+        "pod": "https://pod.werbrouck.me/fm-ugent/",
         "endpoint": "https://fuseki.werbrouck.me/demo/fm-ugent/sparql",
         "satellite": "https://sparql.werbrouck.me/fm-ugent/fm-ugent/sparql",
-        "referenceRegistry": "http://localhost:3000/fm-ugent/igent-referenceregistry"
+        "referenceRegistry": "https://pod.werbrouck.me/fm-ugent/igent-referenceregistry"
     },
     {
-        "projectUrl": "http://localhost:3000/arcadis/igent",
-        "pod": "http://localhost:3000/arcadis/",
+        "projectUrl": "https://pod.werbrouck.me/arcadis/igent",
+        "pod": "https://pod.werbrouck.me/arcadis/",
         "endpoint": "https://fuseki.werbrouck.me/demo/arcadis/sparql",
         "satellite": "https://sparql.werbrouck.me/arcadis/arcadis/sparql",
-        "referenceRegistry": "http://localhost:3000/arcadis/igent-referenceregistry"
+        "referenceRegistry": "https://pod.werbrouck.me/arcadis/igent-referenceregistry"
     }
 ]

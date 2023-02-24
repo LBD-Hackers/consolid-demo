@@ -1,4 +1,4 @@
-const p = require('./duplex.json')
+const p = require('./igent.json')
 
 const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates_fuseki')
 const fetch = require('cross-fetch');
@@ -6,8 +6,8 @@ const { Headers } = fetch;
 const QueryEngine = require('@comunica/query-sparql').QueryEngine
 
 const queryCount = 10
-const iterations = 1
-
+const iterations = 10
+let requests = 0
 const options = ["endpoint", "satellite"]
 const methods = ["comunica", "remote"]
 
@@ -19,7 +19,7 @@ PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
 PREFIX bot: <https://w3id.org/bot#>
 PREFIX dot: <https://w3id.org/dot#>
 
-SELECT ?el ?g WHERE {graph ?g {?el a beo:Door}} LIMIT ${queryCount}`
+SELECT ?el ?g WHERE {graph ?g {?el a beo:Door}} limit ${queryCount}`
 
 const engine = new QueryEngine()
 
@@ -56,18 +56,18 @@ async function run() {
                 const propagate = new Date()
                 const duration = propagate.getTime() - startPropagation.getTime()
                 allDuration += duration
-                // console.log('final', final)
                 // console.log('duration', duration)
             }
         }    
 
     }
-
+    console.log('queryResults.length :>> ', queryResults.length);
     const averageDuration = allDuration / iterations
     const averageDurationPerConcept = allDuration / (queryResults.length * iterations)
     console.log('allDuration', allDuration)
     console.log('averageDuration', averageDuration)
     console.log('averageDurationPerConcept', averageDurationPerConcept)
+    console.log('requests :>> ', requests);
 }
 
 async function findConceptById(concept) {
@@ -108,9 +108,7 @@ async function queryLocalReferences(ref, concept) {
     referenceRegistry = referenceRegistry.replace(referenceRegistry.substring(hashindex, referenceRegistry.length), "");
     const query = selectLocalRepresentation(ref.local.value, ref.concept.value, referenceRegistry)
     const reference = []
-    let results
-    if (method == "remote") results = await queryFuseki(query, concept.owner[option])
-    else results = await queryComunica(query, referenceRegistry )
+    let results = await queryFuseki(query, concept.owner[option])
     results.results.bindings.forEach(binding => reference.push(binding))
     return reference
 }
@@ -128,9 +126,7 @@ async function queryRemoteReferences(ref) {
 
     const pod = getRoot(ref.alias.value)
     const reference = []
-    let results
-    if (method == "remote") results = await queryFuseki(query, podToEndpoint[pod])
-    else results = await queryComunica(query, podToEndpoint[pod])
+    let results = await queryFuseki(query, podToEndpoint[pod])
     results.results.bindings.forEach(binding => reference.push(binding))
     return reference
 }
@@ -139,10 +135,9 @@ async function queryConcept(concept) {
     const query = selectConcept(concept.activeDocument, concept.identifier, concept.owner)
     const endpoints = p.map(i => i[option])
     const projectConcept = []
-    for (const endpoint of endpoints) {
-        let results = await queryFuseki(query, endpoint)
+        let results = await queryFuseki(query, concept.owner.satellite)
         if (results && results.results.bindings.length) results.results.bindings.forEach(binding => projectConcept.push(binding))
-    }
+    
     return projectConcept
 }
 
@@ -156,6 +151,7 @@ function streamToString(stream) {
   }
 
 async function queryFuseki(query, endpoint) {
+    requests += 1
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
     let urlencoded = new URLSearchParams();
