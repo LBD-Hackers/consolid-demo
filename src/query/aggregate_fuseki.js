@@ -8,7 +8,6 @@ const QueryEngine = require('@comunica/query-sparql').QueryEngine
 const queryCount = 10
 const iterations = 1
 
-
 const query = `
 PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
 PREFIX bot: <https://w3id.org/bot#>
@@ -29,8 +28,10 @@ async function run() {
     console.log("duration of query task: ", query.getTime() - now.getTime())
     
     for (let i = 0; i < iterations; i++) {
-
+            const startConceptFinder = new Date()
             const concepts = await findConceptsById(queryResults, p)
+            const endConceptFinder = new Date()
+            console.log('endConceptFinder - startConceptFinder', endConceptFinder - startConceptFinder)
             console.log('JSON.stringify(concepts, 0,4)', JSON.stringify(concepts, 0,4))
         }
 

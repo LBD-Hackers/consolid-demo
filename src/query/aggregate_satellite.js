@@ -4,7 +4,8 @@ const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } =
 const fetch = require('cross-fetch');
 const { Headers } = fetch;
 const QueryEngine = require('@comunica/query-sparql').QueryEngine
-const queryCount = 1
+
+const queryCount = 10
 const iterations = 1
 
 const options = ["endpoint", "satellite"]
@@ -28,7 +29,6 @@ async function run() {
     const now = new Date()
     const queryResults = await queryProject()
     const query = new Date()
-    
     console.log("duration of query task: ", query.getTime() - now.getTime())
     
     for (let i = 0; i < iterations; i++) {
@@ -60,7 +60,6 @@ async function run() {
                 // console.log('duration', duration)
             }
         }    
-        console.log('concepts', concepts)
 
     }
 
@@ -141,20 +140,10 @@ async function queryConcept(concept) {
     const endpoints = p.map(i => i[option])
     const projectConcept = []
     for (const endpoint of endpoints) {
-        let results
-        if (method == "remote") results = await queryFuseki(query, endpoint)
-        else results = await queryComunica(query, endpoint)
-        if (results && results.results.bindings.length) results.results.bindings.forEach(binding => projectConcept.push(binding).value)
+        let results = await queryFuseki(query, endpoint)
+        if (results && results.results.bindings.length) results.results.bindings.forEach(binding => projectConcept.push(binding))
     }
     return projectConcept
-}
-
-async function queryComunica(query, source) {
-    const result = await engine.query(query, {sources: [source]})
-    const { data } = await engine.resultToString(result,'application/sparql-results+json');
-    const asJSON = await streamToString(data)
-    // engine.invalidateHttpCache()
-    return JSON.parse(asJSON)
 }
 
 function streamToString(stream) {

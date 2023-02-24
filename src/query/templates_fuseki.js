@@ -12,7 +12,7 @@ const selectConcept = (activeDocument, identifier, owner) => {
     return  addPrefixes(
 `SELECT ?concept ?local ?alias
     WHERE {
-        GRAPH <${owner.referenceRegistry}> {
+
         ?concept consolid:aggregates/consolid:hasIdentifier ?id  .
         ?id consolid:inDocument <${activeDocument}> ;
             schema:value "${identifier}" .
@@ -28,13 +28,12 @@ const selectConcept = (activeDocument, identifier, owner) => {
         }
 
         FILTER regex(str(?concept), '^((?!graph=).)*$')
-}}`)
+}`)
 }
 
 const selectLocalRepresentation = (reference, concept, graph) => {
     return addPrefixes(`SELECT ?concept ?reference ?value ?doc
     WHERE {
-        GRAPH <${graph}> {
         <${concept}> consolid:aggregates <${reference}> .
         <${reference}> consolid:hasIdentifier ?id .
     
@@ -46,13 +45,12 @@ const selectLocalRepresentation = (reference, concept, graph) => {
     
         BIND(<${concept}> as ?concept)
         BIND(<${reference}> as ?reference)
-    }}`)
+    }`)
 }
 
 const selectRemoteRepresentation = (alias, concept, graph) => {
     return addPrefixes(`SELECT ?reference ?value ?doc ?concept ?alias
     WHERE {
-        GRAPH <${graph}> {
         <${alias}> consolid:aggregates ?reference .        
         ?reference consolid:hasIdentifier ?id .
     
@@ -63,7 +61,7 @@ const selectRemoteRepresentation = (alias, concept, graph) => {
 
     BIND(<${concept}> as ?concept)
     BIND(<${alias}> as ?alias)
-    }}`)
+    }`)
 }
 
 module.exports = {selectConcept, selectRemoteRepresentation, selectLocalRepresentation}
