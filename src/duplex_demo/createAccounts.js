@@ -1,5 +1,6 @@
 const users = require('./setup.json')
 const {fetch} = require('cross-fetch')
+const {generateSession} = require('consolid-daapi')
 
 async function createPod(user) {
   const json = {
@@ -19,8 +20,20 @@ async function createPod(user) {
 }
 
 async function create() {
-  for (const user of Object.keys(users.users)) {
-    await createPod(users.users[user])
+  for (const u of Object.keys(users.users)) {
+    const user = users.users[u]
+    await createPod(user)
+    const session = await generateSession(user, user.webId)
+    const body = `INSERT DATA {<${user.webId}> <https://w3id.org/consolid#hasSparqlSatellite> <${user.satellite}> .}`
+    const options = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/sparql-update"
+      },
+      body
+    }
+
+    await session.fetch(user.webId, options)
   }
 }
 

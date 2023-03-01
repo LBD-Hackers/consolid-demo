@@ -1,4 +1,4 @@
-const p = require('./igent.json')
+const p = require('./duplex.json')
 
 const { selectConcept, selectRemoteRepresentation, selectLocalRepresentation } = require('./templates_fuseki')
 const fetch = require('cross-fetch');
@@ -10,12 +10,20 @@ const iterations = 1
 let requests = 0
 
 
-const query = `
+
+let query = `
 PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
 PREFIX bot: <https://w3id.org/bot#>
 PREFIX dot: <https://w3id.org/dot#>
 
-SELECT ?el ?g WHERE {graph ?g {?el a beo:Door}} limit ${queryCount}`
+SELECT ?el ?g WHERE {graph ?g {?el dot:hasDamageArea ?dam}}`
+
+query = `
+PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
+PREFIX bot: <https://w3id.org/bot#>
+PREFIX dot: <https://w3id.org/dot#>
+
+SELECT ?el ?g WHERE {graph ?g {?el a beo:Door}}`
 
 async function run() {
     let allDuration = 0
@@ -28,7 +36,7 @@ async function run() {
 
     for (let i = 0; i < iterations; i++) {
         const concepts = []
-
+        const identifiers = []
         for (const r of queryResults) {
             const startPropagation = new Date()
             const concept = await findConceptById(r)
@@ -40,18 +48,23 @@ async function run() {
                 concept.forEach(reference => {
                     final.aliases.add(reference.concept.value)
                     if (reference.alias) final.aliases.add(reference.alias.value)
-                    final.references.push({
-                        reference: reference.reference.value,
-                        identifier: reference.value.value,
-                        document: reference.doc.value
-                    })
+                    if (!identifiers.includes(reference.value.value)) {
+                        final.references.push({
+                            reference: reference.reference.value,
+                            identifier: reference.value.value,
+                            document: reference.doc.value
+                        })
+    
+                        identifiers.push(reference.value.value)
+                    }
+
                 })
                 final.aliases = Array.from(final.aliases)
                 concepts.push(final)
                 const propagate = new Date()
                 const duration = propagate.getTime() - startPropagation.getTime()
                 allDuration += duration
-                // console.log('final', final)
+                console.log('final', final)
                 // console.log('duration', duration)
             }
         }

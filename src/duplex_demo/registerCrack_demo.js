@@ -27,7 +27,7 @@ async function run() {
     // for convenience, we have fixed these urls, but they need to be discovered in a real use case
     const imageUrl = "http://localhost:3000/fm/93f09e7a-0229-46e8-8579-964f4d02fca3"
     const url = "http://localhost:3000/fm/fb3d5bcd-8bcb-4d46-be2b-6c3ef824d5d9"
-    const refRegUrl = await findReferenceRegistry(url)
+    const refRegUrl = "http://localhost:3000/fm/afa64a49-eae2-4a39-9fe4-3be92b491453"
 
     const project = new Catalog(session, url)
 

@@ -5,25 +5,42 @@ const {DCAT, DCTERMS} = require('@inrupt/vocab-common-rdf')
 const {QueryEngine} = require('@comunica/query-sparql')
 const {v4} = require('uuid')
 
-async function findReferenceRegistry(projectUrl) {
-    const engine = new QueryEngine()
+
+async function querySatellite(query, endpoint, session) {
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    let urlencoded = new URLSearchParams();
+    urlencoded.append("query", query)
+    const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: urlencoded,
+    };
+
+    const results = await session.fetch(`${endpoint}`, requestOptions).then(i => i.json())
+    if (Object.keys(results).length !== 0) return results
+    else return false
+}
+
+async function findReferenceRegistry(projectUrl, session) {
     const sat = await getSatelliteFromLdpResource(projectUrl)
-    console.log('sat', sat)
+
     const q = `
     SELECT ?refReg WHERE {
         <${projectUrl}> <${DCAT.dataset}> ?ds .
         ?ds a <${CONSOLID.ReferenceRegistry}> ;
             <${DCAT.distribution}>/<${DCAT.downloadURL}> ?refReg.
-    } LIMIT 1`
-    const results = await engine.queryBindings(q, {sources: [sat]})
-    const bindings = await results.toArray()
-    if (bindings.length) return bindings[0].get('refReg').value
+    }`
+    console.log(q)
+    console.log(sat)
+    const results = await querySatellite(q, sat, session)
+    console.log('results', results)
+    if (results.results.bindings.length) return results.results.bindings[0]['refReg'].value
     else throw new Error('could not find reference registry for this project')
 }
 
-async function findPairs(ttlUrl, gltfUrl) {
-    const engine = new QueryEngine()
-    const ttlSatellite = await getSatelliteFromLdpResource(ttlUrl)
+async function findPairs(ttlUrl, gltfUrl, session) {
+    const sat = await getSatelliteFromLdpResource(ttlUrl)
 
     const q = `
     PREFIX props: <https://w3id.org/props#> 
@@ -31,13 +48,14 @@ async function findPairs(ttlUrl, gltfUrl) {
     SELECT ?ttl ?gltf WHERE {
         ?ttl props:globalIdIfcRoot/schema:value ?gltf
     }`
-    const results = await engine.queryBindings(q, {sources: [ttlSatellite]})
-    const bindings = await results.toArray()
+
+    const results = await querySatellite(q, sat, session)
+    console.log(results)
     const mapping = []
-    for (const binding of bindings) {
+    for (const binding of results.results.bindings) {
         mapping.push({
-            gltf: binding.get('gltf').value,
-            ttl: binding.get('ttl').value
+            gltf: binding['gltf'].value,
+            ttl: binding['ttl'].value
         })
     }
 
@@ -50,13 +68,14 @@ async function run() {
     const gltfUrl = "http://localhost:3000/engineer/f177466f-5929-445f-b2d7-ee19576c7d3a"
     const gltfProject = "http://localhost:3000/engineer/40050b82-9907-434c-91ab-7ce7c137d8b6"
 
-    //1. find pairs via TTL query
-    const pairs = await findPairs(ttlUrl, gltfUrl)
-    const ttlRefRegUrl = await findReferenceRegistry(ttlProject)
-    const gltfRefRegUrl = await findReferenceRegistry(gltfProject)
-
     const ttlSession = await generateSession(users.users["http://localhost:3000/architect/profile/card#me"])
     const gltfSession = await generateSession(users.users["http://localhost:3000/engineer/profile/card#me"])
+
+    //1. find pairs via TTL query
+    const pairs = await findPairs(ttlUrl, gltfUrl, ttlSession)
+
+    const ttlRefRegUrl = await findReferenceRegistry(ttlProject, ttlSession)
+    const gltfRefRegUrl = await findReferenceRegistry(gltfProject, gltfSession)
 
     const ttlRefReg = new ReferenceRegistry(ttlSession, ttlRefRegUrl)
     const gltfRefReg = new ReferenceRegistry(gltfSession, gltfRefRegUrl)

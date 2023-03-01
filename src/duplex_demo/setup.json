@@ -2,6 +2,7 @@
     "users": {
         "http://localhost:3000/architect/profile/card#me": {
             "webId": "http://localhost:3000/architect/profile/card#me",
+            "satellite": "http://localhost:3010/architect/sparql",
             "name": "architect",
             "email": "architect@example.org",
             "password": "test123",
@@ -15,6 +16,7 @@
         },
         "http://localhost:3000/engineer/profile/card#me": {
             "webId": "http://localhost:3000/engineer/profile/card#me",
+            "satellite": "http://localhost:3010/engineer/sparql",
             "name": "engineer",
             "email": "engineer@example.org",
             "password": "test123",
@@ -30,6 +32,7 @@
         },
         "http://localhost:3000/fm/profile/card#me": {
             "webId": "http://localhost:3000/fm/profile/card#me",
+            "satellite": "http://localhost:3010/fm/sparql",
             "name": "fm",
             "email": "fm@example.org",
             "password": "test123",
