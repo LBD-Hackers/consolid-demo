@@ -1,0 +1,34 @@
+{
+    "users": {
+        "http://localhost:3000/architect/profile/card#me": {
+            "webId": "http://localhost:3000/architect/profile/card#me",
+            "pod": "http://localhost:3000/architect/",
+            "name": "architect",
+            "email": "architect@example.org",
+            "password": "test123",
+            "idp": "http://localhost:3000",
+            "projectId": "duplex",
+            "resourcePath": "./resources/architect/"
+        },
+        "http://localhost:3000/mep/profile/card#me": {
+            "webId": "http://localhost:3000/mep/profile/card#me",
+            "pod": "http://localhost:3000/mep/",
+            "name": "mep",
+            "email": "mep@example.org",
+            "password": "test123",
+            "idp": "http://localhost:3000",
+            "projectId": "duplex",
+            "resourcePath": "./resources/mep/"
+        },
+        "http://localhost:3000/owner/profile/card#me": {
+            "webId": "http://localhost:3000/owner/profile/card#me",
+            "pod": "http://localhost:3000/owner/",
+            "name": "owner",
+            "email": "owner@example.org",
+            "password": "test123",
+            "idp": "http://localhost:3000",
+            "projectId": "duplex",
+            "resourcePath": "./resources/owner/"
+        }
+    }
+}
