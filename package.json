@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@comunica/query-sparql": "^2.6.4",
+    "@comunica/query-sparql-link-traversal": "^0.2.0",
     "@inrupt/solid-client-authn-node": "^1.13.0",
     "@inrupt/vocab-common-rdf": "^1.0.5",
     "consolid-daapi": "^0.0.8",

@@ -12,7 +12,7 @@ const q = `SELECT DISTINCT * WHERE {
 }`
 
 const now = new Date()
-query(q, accessPoints)
+query(q, accessPoints, {lenient: true})
 .then((data) => {
   data.map(b => console.log('Project resources:', b.get("distribution").value))
   console.log('duration: ', new Date() - now)
